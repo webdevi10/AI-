@@ -1,0 +1,56 @@
+import random
+
+class NumberGuessingAgent:
+    """
+    An intelligent agent that guesses a secret number in a given range
+    using feedback ('higher' / 'lower' / 'correct') from the environment.
+    It uses a binary-search strategy to minimize the number of guesses.
+    """
+
+    def __init__(self, low=1, high=100):
+        self.low = low
+        self.high = high
+
+    def guess(self):
+        return (self.low + self.high) // 2
+
+    def update(self, guess_value, feedback):
+        if feedback == "lower":
+            self.high = guess_value - 1
+        elif feedback == "higher":
+            self.low = guess_value + 1
+
+    def play(self, secret_number):
+        attempts = 0
+
+        while self.low <= self.high:
+            attempts += 1
+            current_guess = self.guess()
+
+            print(f"Attempt {attempts}: Agent guesses {current_guess}")
+
+            if current_guess == secret_number:
+                print(
+                    f"Agent guessed the number {secret_number} correctly "
+                    f"in {attempts} attempts!"
+                )
+                return attempts
+
+            elif current_guess < secret_number:
+                print("Feedback: Higher")
+                self.update(current_guess, "higher")
+
+            else:
+                print("Feedback: Lower")
+                self.update(current_guess, "lower")
+
+        print("Something went wrong — range exhausted.")
+        return attempts
+
+
+if __name__ == "__main__":
+    LOW, HIGH = 1, 100
+    secret_number = random.randint(LOW, HIGH)
+
+    agent = NumberGuessingAgent(LOW, HIGH)
+    agent.play(secret_number)
