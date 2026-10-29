@@ -1,0 +1,47 @@
+import re
+import random
+
+rules = [
+    (r'hi|hello|hey', ["Hello! How can I help you today?", "Hi there!"]),
+    (r'my name is (.*)', ["Nice to meet you, {0}!"]),
+    (r'(.*) your name\??', ["I am ChatBot, your AI assistant."]),
+    (r'(.*) (help|assist) (.*)', ["Sure, tell me more about what you need help with."]),
+    (r'(.*) weather (.*)', ["I can't check live weather, but I hope it's sunny where you are!"]),
+    (r'(.*) how are you (.*)', ["I'm just a program, but I'm running smoothly. Thanks for asking!"]),
+    (r'.*\b(bye|goodbye|exit|quit)\b.*', ["Goodbye! Have a great day."]),
+    (r'(.*)', ["I'm not sure I understand. Could you rephrase that?", "Interesting — tell me more."])
+]
+
+def respond(user_input):
+    original_input = user_input.strip()
+    user_input = original_input.lower()
+
+    for pattern, responses in rules:
+        match = re.fullmatch(pattern, user_input)
+
+        if match:
+            response = random.choice(responses)
+
+            if pattern == r'my name is (.*)':
+                name = re.fullmatch(r'my name is (.*)', original_input, re.IGNORECASE).group(1)
+                response = response.format(name)
+            elif match.groups():
+                response = response.format(*match.groups())
+
+            return response
+
+    return "I did not understand that."
+
+def chat():
+    print("ChatBot: Hello! Type 'bye' to end the conversation.")
+
+    while True:
+        user_input = input("You: ")
+        reply = respond(user_input)
+        print("ChatBot:", reply)
+
+        if re.fullmatch(r'.*\b(bye|goodbye|exit|quit)\b.*', user_input.strip(), re.IGNORECASE):
+            break
+
+if __name__ == "__main__":
+    chat()
