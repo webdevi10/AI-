@@ -2,7 +2,7 @@
 # AI Practical Programs --- Code Explanations & Viva Preparation
 
 
-## Contents
+##Contents
 
 1.  A\* Search --- 8-Puzzle
 2.  Alpha-Beta Pruning
